@@ -322,6 +322,140 @@ export class GitService {
       return false;
     }
   }
+
+  /**
+   * Merge a branch
+   * v1.1 Feature
+   */
+  async merge(branch: string, strategy?: 'ours' | 'theirs'): Promise<boolean> {
+    try {
+      const args = ['merge', branch];
+      if (strategy) {
+        args.push('-X', strategy);
+      }
+      await this.executeGitCommand(args);
+      return true;
+    } catch (error) {
+      console.error('Failed to merge branch:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Abort merge
+   * v1.1 Feature
+   */
+  async abortMerge(): Promise<boolean> {
+    try {
+      await this.executeGitCommand(['merge', '--abort']);
+      return true;
+    } catch (error) {
+      console.error('Failed to abort merge:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Rebase onto a branch
+   * v1.1 Feature
+   */
+  async rebase(branch: string): Promise<boolean> {
+    try {
+      await this.executeGitCommand(['rebase', branch]);
+      return true;
+    } catch (error) {
+      console.error('Failed to rebase:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Continue rebase after resolving conflicts
+   * v1.1 Feature
+   */
+  async rebaseContinue(): Promise<boolean> {
+    try {
+      await this.executeGitCommand(['rebase', '--continue']);
+      return true;
+    } catch (error) {
+      console.error('Failed to continue rebase:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Abort rebase
+   * v1.1 Feature
+   */
+  async rebaseAbort(): Promise<boolean> {
+    try {
+      await this.executeGitCommand(['rebase', '--abort']);
+      return true;
+    } catch (error) {
+      console.error('Failed to abort rebase:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Cherry-pick a commit
+   * v1.1 Feature
+   */
+  async cherryPick(commitHash: string): Promise<boolean> {
+    try {
+      await this.executeGitCommand(['cherry-pick', commitHash]);
+      return true;
+    } catch (error) {
+      console.error('Failed to cherry-pick commit:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Stash changes
+   * v1.1 Feature
+   */
+  async stash(message?: string): Promise<boolean> {
+    try {
+      const args = ['stash', 'push'];
+      if (message) {
+        args.push('-m', message);
+      }
+      await this.executeGitCommand(args);
+      return true;
+    } catch (error) {
+      console.error('Failed to stash changes:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Apply stash
+   * v1.1 Feature
+   */
+  async stashPop(): Promise<boolean> {
+    try {
+      await this.executeGitCommand(['stash', 'pop']);
+      return true;
+    } catch (error) {
+      console.error('Failed to pop stash:', error);
+      return false;
+    }
+  }
+
+  /**
+   * List stashes
+   * v1.1 Feature
+   */
+  async listStashes(): Promise<string[]> {
+    try {
+      const output = await this.executeGitCommand(['stash', 'list']);
+      return output.split('\n').filter(line => line.trim());
+    } catch (error) {
+      console.error('Failed to list stashes:', error);
+      return [];
+    }
+  }
 }
 
 // Singleton instance

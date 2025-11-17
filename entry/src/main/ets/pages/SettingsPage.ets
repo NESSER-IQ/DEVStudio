@@ -2,15 +2,19 @@
  * SettingsPage - Application settings and preferences
  */
 
+import { themeService } from '../services/ThemeService';
+import { Theme } from '../models/Theme';
+
 @Entry
 @Component
 struct SettingsPage {
   @State fontSize: number = 14;
-  @State theme: string = 'dark';
+  @State currentTheme: Theme = themeService.getCurrentTheme();
   @State enableLSP: boolean = true;
   @State enableGit: boolean = true;
   @State autoSave: boolean = true;
   @State tabSize: number = 2;
+  @State showThemePicker: boolean = false;
 
   build() {
     Column() {
@@ -77,10 +81,9 @@ struct SettingsPage {
 
           this.SettingItem(
             'Theme',
-            this.theme === 'dark' ? 'Dark' : 'Light',
+            this.currentTheme.displayName,
             () => {
-              // Toggle theme
-              this.theme = this.theme === 'dark' ? 'light' : 'dark';
+              this.showThemePicker = true;
             }
           )
 
@@ -118,7 +121,7 @@ struct SettingsPage {
 
           this.SettingItem(
             'Version',
-            '1.0.0 (MVP)',
+            '1.1.0',
             null
           )
 
@@ -142,6 +145,100 @@ struct SettingsPage {
     .width('100%')
     .height('100%')
     .backgroundColor($r('app.color.primary_bg'))
+
+    // Theme Picker Dialog
+    if (this.showThemePicker) {
+      this.ThemePickerDialog()
+    }
+  }
+
+  @Builder
+  ThemePickerDialog() {
+    Column() {
+      // Backdrop
+      Column()
+        .width('100%')
+        .height('100%')
+        .backgroundColor('#80000000')
+        .onClick(() => {
+          this.showThemePicker = false;
+        })
+
+      // Dialog
+      Column() {
+        // Header
+        Row() {
+          Text('Select Theme')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor($r('app.color.text_primary'))
+            .layoutWeight(1)
+
+          Button() {
+            Text('×')
+              .fontSize(24)
+              .fontColor($r('app.color.text_secondary'))
+          }
+          .backgroundColor('transparent')
+          .width(40)
+          .height(40)
+          .onClick(() => {
+            this.showThemePicker = false;
+          })
+        }
+        .width('100%')
+        .padding(16)
+
+        Divider()
+          .color($r('app.color.border'))
+
+        // Theme options
+        Column() {
+          ForEach(themeService.getAllThemes(), (theme: Theme) => {
+            Row() {
+              Column() {
+                Text(theme.displayName)
+                  .fontSize(16)
+                  .fontColor($r('app.color.text_primary'))
+
+                Text(theme.type)
+                  .fontSize(12)
+                  .fontColor($r('app.color.text_secondary'))
+                  .margin({ top: 4 })
+                  .textTransform(TextTransform.Capitalize)
+              }
+              .alignItems(HorizontalAlign.Start)
+              .layoutWeight(1)
+
+              if (this.currentTheme.id === theme.id) {
+                Text('✓')
+                  .fontSize(24)
+                  .fontColor($r('app.color.accent'))
+              }
+            }
+            .width('100%')
+            .padding(16)
+            .backgroundColor(this.currentTheme.id === theme.id ?
+              $r('app.color.tertiaryBg') : 'transparent')
+            .borderRadius(8)
+            .onClick(async () => {
+              await themeService.setTheme(theme.id);
+              this.currentTheme = themeService.getCurrentTheme();
+              this.showThemePicker = false;
+            })
+          })
+        }
+        .padding(16)
+      }
+      .width('90%')
+      .maxWidth(400)
+      .backgroundColor($r('app.color.secondary_bg'))
+      .borderRadius(12)
+      .position({ x: '5%', y: '30%' })
+    }
+    .width('100%')
+    .height('100%')
+    .position({ x: 0, y: 0 })
   }
 
   @Builder
