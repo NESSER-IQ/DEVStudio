@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monaco Editor - ArkStudio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #858585;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">Loading Monaco Editor...</div>
+    <div id="container"></div>
+
+    <!-- Monaco Editor from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+
+    <script>
+        let editor;
+        let currentLanguageClient;
+
+        // Configure Monaco
+        require.config({
+            paths: {
+                'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'
+            },
+            'vs/nls': {
+                availableLanguages: {
+                    '*': 'en'
+                }
+            }
+        });
+
+        // Initialize Monaco Editor
+        require(['vs/editor/editor.main'], function() {
+            console.log('Monaco Editor loaded successfully');
+
+            // Create editor instance
+            editor = monaco.editor.create(document.getElementById('container'), {
+                value: '// Welcome to ArkStudio\n// Your HarmonyOS Native IDE\n\n',
+                language: 'typescript',
+                theme: 'vs-dark',
+                fontSize: 14,
+                fontFamily: "'Fira Code', 'Cascadia Code', 'Consolas', 'Monaco', monospace",
+                fontLigatures: true,
+                minimap: {
+                    enabled: true
+                },
+                automaticLayout: true,
+                scrollBeyondLastLine: false,
+                lineNumbers: 'on',
+                renderWhitespace: 'selection',
+                tabSize: 2,
+                insertSpaces: true,
+                wordWrap: 'off',
+                contextmenu: true,
+                folding: true,
+                lineDecorationsWidth: 10,
+                lineNumbersMinChars: 3,
+                glyphMargin: true,
+                smoothScrolling: true,
+                cursorBlinking: 'smooth',
+                cursorSmoothCaretAnimation: 'on',
+                roundedSelection: true,
+                padding: {
+                    top: 10,
+                    bottom: 10
+                },
+                suggest: {
+                    showIcons: true,
+                    showKeywords: true,
+                    showSnippets: true
+                },
+                quickSuggestions: {
+                    other: true,
+                    comments: false,
+                    strings: false
+                }
+            });
+
+            // Add custom commands
+            editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function() {
+                console.log('Save file command triggered');
+                // This will be handled by ArkTS
+            });
+
+            // Listen to content changes
+            editor.onDidChangeModelContent((e) => {
+                console.log('Content changed');
+                // Can send updates to ArkTS if needed
+            });
+
+            console.log('Monaco Editor initialized');
+        });
+
+        // API for ArkTS to interact with Monaco
+
+        function setEditorContent(content) {
+            if (editor) {
+                editor.setValue(content);
+            }
+        }
+
+        function getEditorContent() {
+            if (editor) {
+                return editor.getValue();
+            }
+            return '';
+        }
+
+        function setEditorLanguage(language) {
+            if (editor) {
+                const model = editor.getModel();
+                if (model) {
+                    monaco.editor.setModelLanguage(model, language);
+                }
+            }
+        }
+
+        function setEditorTheme(theme) {
+            if (editor) {
+                monaco.editor.setTheme(theme);
+            }
+        }
+
+        function formatDocument() {
+            if (editor) {
+                editor.getAction('editor.action.formatDocument').run();
+            }
+        }
+
+        function findText(text) {
+            if (editor) {
+                editor.trigger('find', 'actions.find', text);
+            }
+        }
+
+        function replaceText(find, replace) {
+            if (editor) {
+                const model = editor.getModel();
+                if (model) {
+                    const fullRange = model.getFullModelRange();
+                    const text = model.getValue();
+                    const newText = text.replace(new RegExp(find, 'g'), replace);
+                    model.pushEditOperations(
+                        [],
+                        [{
+                            range: fullRange,
+                            text: newText
+                        }],
+                        () => null
+                    );
+                }
+            }
+        }
+
+        function insertSnippet(snippet) {
+            if (editor) {
+                const position = editor.getPosition();
+                editor.executeEdits('', [{
+                    range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
+                    text: snippet
+                }]);
+            }
+        }
+
+        function setReadOnly(readOnly) {
+            if (editor) {
+                editor.updateOptions({ readOnly: readOnly });
+            }
+        }
+
+        function focusEditor() {
+            if (editor) {
+                editor.focus();
+            }
+        }
+
+        // LSP Integration (to be implemented)
+        function registerLanguageServer(languageId, serverConfig) {
+            console.log('Registering language server for:', languageId);
+            // This will be enhanced with actual LSP client implementation
+            // For now, we rely on Monaco's built-in language support
+        }
+
+        function updateDiagnostics(uri, diagnostics) {
+            if (editor) {
+                const model = editor.getModel();
+                if (model && model.uri.toString() === uri) {
+                    const markers = diagnostics.map(d => ({
+                        severity: d.severity || monaco.MarkerSeverity.Error,
+                        startLineNumber: d.range.start.line + 1,
+                        startColumn: d.range.start.character + 1,
+                        endLineNumber: d.range.end.line + 1,
+                        endColumn: d.range.end.character + 1,
+                        message: d.message,
+                        source: d.source
+                    }));
+                    monaco.editor.setModelMarkers(model, 'lsp', markers);
+                }
+            }
+        }
+
+        // Expose functions to window for ArkTS access
+        window.setEditorContent = setEditorContent;
+        window.getEditorContent = getEditorContent;
+        window.setEditorLanguage = setEditorLanguage;
+        window.setEditorTheme = setEditorTheme;
+        window.formatDocument = formatDocument;
+        window.findText = findText;
+        window.replaceText = replaceText;
+        window.insertSnippet = insertSnippet;
+        window.setReadOnly = setReadOnly;
+        window.focusEditor = focusEditor;
+        window.registerLanguageServer = registerLanguageServer;
+        window.updateDiagnostics = updateDiagnostics;
+
+        console.log('ArkStudio Monaco integration ready');
+    </script>
+</body>
+</html>

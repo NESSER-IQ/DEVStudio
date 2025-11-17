@@ -1,0 +1,52 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#1E1E1E"
+    },
+    {
+      "name": "primary_bg",
+      "value": "#1E1E1E"
+    },
+    {
+      "name": "secondary_bg",
+      "value": "#252526"
+    },
+    {
+      "name": "editor_bg",
+      "value": "#1E1E1E"
+    },
+    {
+      "name": "sidebar_bg",
+      "value": "#252526"
+    },
+    {
+      "name": "text_primary",
+      "value": "#D4D4D4"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#858585"
+    },
+    {
+      "name": "accent",
+      "value": "#007ACC"
+    },
+    {
+      "name": "border",
+      "value": "#3E3E42"
+    },
+    {
+      "name": "success",
+      "value": "#4EC9B0"
+    },
+    {
+      "name": "error",
+      "value": "#F48771"
+    },
+    {
+      "name": "warning",
+      "value": "#CE9178"
+    }
+  ]
+}
