@@ -1,0 +1,31 @@
+{
+  "name": "ocean-theme",
+  "displayName": "Ocean Theme",
+  "version": "1.0.0",
+  "publisher": "sample-publisher",
+  "description": "A beautiful ocean-inspired color theme",
+  "author": "Theme Designer",
+  "license": "MIT",
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "ocean",
+    "blue",
+    "dark"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "id": "ocean",
+        "label": "Ocean",
+        "uiTheme": "dark",
+        "path": "./themes/ocean-theme.json"
+      }
+    ]
+  },
+  "engines": {
+    "harmonyos": "^1.0.0"
+  }
+}

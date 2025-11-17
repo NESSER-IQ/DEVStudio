@@ -1,0 +1,46 @@
+{
+  "name": "markdown-support",
+  "displayName": "Markdown Language Support",
+  "version": "1.0.0",
+  "publisher": "sample-publisher",
+  "description": "Enhanced Markdown language support with preview",
+  "author": "Language Developer",
+  "license": "MIT",
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "markdown",
+    "md",
+    "preview",
+    "language"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "markdown",
+        "extensions": [
+          ".md",
+          ".markdown"
+        ],
+        "aliases": [
+          "Markdown",
+          "markdown"
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "markdown.showPreview",
+        "title": "Markdown: Show Preview"
+      }
+    ]
+  },
+  "engines": {
+    "harmonyos": "^1.0.0"
+  }
+}
