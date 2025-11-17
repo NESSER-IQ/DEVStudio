@@ -1,12 +1,44 @@
+# Dependencies
 /node_modules
 /oh_modules
-/local.properties
-/.idea
+
+# Build outputs
 **/build
 /.hvigor
 .cxx
+
+# IDE
+/.idea
+/.vscode
+*.iml
+
+# Local configuration
+/local.properties
+
+# Analysis tools
 /.clangd
 /.clang-format
 /.clang-tidy
-**/.test
 /.appanalyzer
+**/.test
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+.cache
+
+# HAP packages
+*.hap
+*.app
+
+# Coverage
+coverage/
+.nyc_output/

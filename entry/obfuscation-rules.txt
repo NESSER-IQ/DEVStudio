@@ -1,0 +1,31 @@
+# ArkStudio Obfuscation Rules
+# These rules control code obfuscation for release builds
+
+# Keep entry ability
+-keep class EntryAbility
+
+# Keep all exported components
+-keep @Entry class *
+
+# Keep service classes
+-keep class **/*Service {
+    public <methods>;
+}
+
+# Keep model classes
+-keep class **/models/** {
+    *;
+}
+
+# Keep LSP related classes
+-keep class **/LSPClient {
+    *;
+}
+
+# Keep public APIs
+-keep public class * {
+    public <methods>;
+}
+
+# Don't obfuscate file names
+-keepfilenames

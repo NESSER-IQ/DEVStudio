@@ -1,0 +1,60 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "ArkStudio - Native IDE for HarmonyOS"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "ArkStudio Entry Ability"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "ArkStudio"
+    },
+    {
+      "name": "app_name",
+      "value": "ArkStudio"
+    },
+    {
+      "name": "welcome_message",
+      "value": "Welcome to ArkStudio"
+    },
+    {
+      "name": "file_explorer",
+      "value": "File Explorer"
+    },
+    {
+      "name": "editor",
+      "value": "Editor"
+    },
+    {
+      "name": "terminal",
+      "value": "Terminal"
+    },
+    {
+      "name": "git",
+      "value": "Git"
+    },
+    {
+      "name": "settings",
+      "value": "Settings"
+    },
+    {
+      "name": "open_folder",
+      "value": "Open Folder"
+    },
+    {
+      "name": "new_file",
+      "value": "New File"
+    },
+    {
+      "name": "save",
+      "value": "Save"
+    },
+    {
+      "name": "search",
+      "value": "Search"
+    }
+  ]
+}
