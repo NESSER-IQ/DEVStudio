@@ -1,3 +1,7 @@
+/**
+ * Build profile configuration for HarmonyOS Code Editor
+ * DevEco Studio build configuration
+ */
 {
   "app": {
     "signingConfigs": [],
